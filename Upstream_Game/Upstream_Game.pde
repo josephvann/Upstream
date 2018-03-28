@@ -110,12 +110,12 @@ void draw() {
     if (key == 'D' || key == 'd') {
       head.movePlayerPart('D', 3);
     }
-    if (key == 'W' || key == 'w') {
+    if (key == 'W' || key == 'w' && head.pos.y - 10 >= 30) {
       head.movePlayerPart('W', 3);
       body.movePlayerPart('W', 3);
       tail.movePlayerPart('W', 3);
     }
-    if (key == 'S' || key == 's') {
+    if (key == 'S' || key == 's'&& tail.pos.y + 30 <= height) {
       head.movePlayerPart('S', 3);
       body.movePlayerPart('S', 3);
       tail.movePlayerPart('S', 3);
@@ -185,6 +185,13 @@ void draw() {
     }
     if(tail.pos.y < body.pos.y + 50) {
       tail.pos.y += 1; 
+    }
+    
+    if(body.pos.x != head.pos.x) {
+      body.pos.x += 0.125*(head.pos.x - body.pos.x);  
+    }
+    if(tail.pos.x != body.pos.x) {
+      tail.pos.x += 0.125*(body.pos.x - tail.pos.x);  
     }
     
 
