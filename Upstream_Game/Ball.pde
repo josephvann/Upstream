@@ -109,8 +109,9 @@ class Ball {
   void display() {
     this.pos.add(deltaPos);
     this.pos.x = constrain(this.pos.x, this.diameter/2, width-(this.diameter/2));
-    stroke(128,0,0);
-    strokeWeight(3);
+    //stroke(128,0,0);
+    //strokeWeight(3);
+    noStroke();
     fill(ballFill);
     ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
   }

@@ -5,7 +5,7 @@ class PlayerPart {
   color playerFill = color(0, 255, 128);
   float diameter = 25;
   float drag = 0.8;
-  float elasticCoefficient = 0.75;
+  float elasticCoefficient = 0.5;
   float overlapCorrection = 1.2;
   float health = 15.0;
   PVector gravity = new PVector(0, 0.225);
@@ -20,13 +20,16 @@ class PlayerPart {
   void display() {
     this.deltaPos.mult(drag);
     fill(this.playerFill);
-    stroke(0,0,0);
-    strokeWeight(3);
+    noStroke();
+
+    //stroke(0,0,0);
+    //strokeWeight(3);
 
     this.pos.add(deltaPos);
+    constrain(this.pos.x, 0, width);
+    constrain(this.pos.y, 0, height);
     ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
   }
-
   void movePlayerPart(char key1, float speed) {
     if (this.deltaPos.mag() <= this.maxSpeed) {
       if (key1 == 'A' || key1 == 'a' && this.pos.x > this.diameter/2) {
@@ -43,9 +46,20 @@ class PlayerPart {
       }
     }
   }
-
-
-
+  void checkPlayerPartCollision(PlayerPart player1) {
+    float objectSpeed = this.deltaPos.mag();
+    float subjectSpeed = player1.deltaPos.mag();
+    PVector distance = PVector.sub(player1.pos, this.pos); 
+    float distanceMag = distance.mag();
+    float minDistance = (this.diameter/2)+(player1.diameter/2);
+    if (distanceMag < minDistance) {
+      float theta = distance.heading();
+      this.deltaPos = PVector.fromAngle(theta+PI).mult(objectSpeed*(this.elasticCoefficient)*this.overlapCorrection);
+      player1.deltaPos = PVector.fromAngle(theta).mult(subjectSpeed*(player1.elasticCoefficient)*player1.overlapCorrection);
+      
+      player1.display();
+    } 
+  }
   void applyForce(PVector force) {
     this.deltaPos.add(force);
   }
